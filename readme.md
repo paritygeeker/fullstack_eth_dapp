@@ -1,6 +1,7 @@
 ##
 
 https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
+https://medium.com/@mvmurthy/full-stack-hello-world-voting-ethereum-dapp-tutorial-part-1-40d2d0d807c2
 
 
 node_modules/.bin/testrpc -h 0.0.0.0
@@ -32,3 +33,12 @@ contractInstance.voteForCandidate('Rama', {from: web3.eth.accounts[0]})
 contractInstance.voteForCandidate('Rama', {from: web3.eth.accounts[0]})
 
 contractInstance.totalVotesFor.call('Rama').toLocaleString()
+
+
+# setup 2
+
+sudo npm install -g truffle
+
+mkdir voting && cd voting
+
+sudo npm install -g webpack
