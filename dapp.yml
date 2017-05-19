@@ -33,22 +33,35 @@
     with_items:
     - ethereumjs-testrpc
     - web3
-
-
-#  - name: "Add ethereum repo"
+  - name: add ethereum repo
+    become: yes
+    apt_repository:
+      repo: "ppa:ethereum/ethereum"
+  - name: install program: ethereum, supervisor
+    become: yes
+    apt: name={{ item }} update_cache=yes state=present
+    with_items:
+    - ethereum
+    - supervisor
+    - nginx
+  - name: copy supervisor conf
+    become: yes
+    copy:
+      src: "sp_eth.conf"
+      dest: "/etc/supervisor/conf.d/sp_eth.conf"
+#  - name: "Reread && add program eth"
 #    become: yes
-#    apt_repository:
-#      repo: "ppa:ethereum/ethereum"
+#    supervisorctl:
+#      name: eth
+#      state: present
 #
-#  - name: "Install program: ethereum, supervisor"
-#    become: yes
-#    apt: name={{ item }} update_cache=yes state=present
-#    with_items:
-#    - ethereum
-#    - supervisor
-#
-#  - name: "copy supervisor conf"
-#    become: yes
-#    copy:
-#      src: "sp_eth.conf"
-#      dest: "/etc/supervisor/conf.d/sp_eth.conf"
+#  - name: "Start program eth"
+#    become: true
+#    supervisorctl:
+#      name: eth
+#      state: started
+  - name: npm install truffle webpack
+    npm: name={{ item }} state=present global=yes
+    with_items:
+    - truffle
+    - webpack
