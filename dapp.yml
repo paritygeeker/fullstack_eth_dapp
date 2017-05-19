@@ -44,11 +44,17 @@
     - ethereum
     - supervisor
     - nginx
-  - name: copy supervisor conf
-    become: yes
-    copy:
-      src: "sp_eth.conf"
-      dest: "/etc/supervisor/conf.d/sp_eth.conf"
+  - name: npm install truffle webpack
+    npm: name={{ item }} state=present global=yes
+    with_items:
+    - truffle
+    - webpack
+
+#  - name: copy supervisor conf
+#    become: yes
+#    copy:
+#      src: "sp_eth.conf"
+#      dest: "/etc/supervisor/conf.d/sp_eth.conf"
 #  - name: "Reread && add program eth"
 #    become: yes
 #    supervisorctl:
@@ -60,8 +66,3 @@
 #    supervisorctl:
 #      name: eth
 #      state: started
-  - name: npm install truffle webpack
-    npm: name={{ item }} state=present global=yes
-    with_items:
-    - truffle
-    - webpack
