@@ -1,0 +1,54 @@
+---
+- hosts: all
+  user: ubuntu
+  vars:
+    node_version: 6.1.0
+    working_dir: ./hello_world_working
+
+  tasks:
+  - name: "FIX: Ubuntu 16.04 LTS doesn't come with certain modules, required by ansible"
+    raw: apt-get install aptitude -y
+    become: yes
+    become_user: root
+    become_method: sudo
+
+  - name: set timezone to Asia/Shanghai
+    become: yes
+    timezone:
+      name: Asia/Shanghai
+
+  - name: install build-essential
+    become: yes
+    apt: name={{ item }} update_cache=yes state=present
+    with_items:
+    - build-essential
+    - supervisor
+    - npm
+    - nodejs-legacy
+
+  - name: mkdir hello_world_working
+    file: path={{ working_dir }} state=directory
+  - name: npm install ethereumjs-testrpc web3
+    npm: name={{ item }} state=present path={{ working_dir }}
+    with_items:
+    - ethereumjs-testrpc
+    - web3
+
+
+#  - name: "Add ethereum repo"
+#    become: yes
+#    apt_repository:
+#      repo: "ppa:ethereum/ethereum"
+#
+#  - name: "Install program: ethereum, supervisor"
+#    become: yes
+#    apt: name={{ item }} update_cache=yes state=present
+#    with_items:
+#    - ethereum
+#    - supervisor
+#
+#  - name: "copy supervisor conf"
+#    become: yes
+#    copy:
+#      src: "sp_eth.conf"
+#      dest: "/etc/supervisor/conf.d/sp_eth.conf"
